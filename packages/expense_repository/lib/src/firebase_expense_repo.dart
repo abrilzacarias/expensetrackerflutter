@@ -27,7 +27,7 @@ class FirebaseExpenseRepository implements ExpenseRepository {
       return await categoryCollection
       .get()
       .then((value) => value.docs.map(
-        (e) => Category.fromEntity(CategoryEntity.fromDocument(e.data() as Map<String, Object>))).toList()
+        (e) => Category.fromEntity(CategoryEntity.fromDocument(e.data()))).toList()
       );
 
     } catch (e) {
@@ -36,4 +36,16 @@ class FirebaseExpenseRepository implements ExpenseRepository {
     }
   }
 
+  @override
+  Future<void> createExpense(Expense expense) async {
+    try {
+      return await expenseCollection
+      .doc(expense.expenseId)
+      .set(expense.toEntity().toDocument());
+
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
 }

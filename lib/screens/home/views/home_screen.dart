@@ -5,6 +5,11 @@ import 'package:expensetrackerflutter/screens/home/views/main_screen.dart';
 import 'package:expensetrackerflutter/screens/stats/stats_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:expense_repository/expense_repository.dart';
+import '../../add_expense/blocs/create_category/create_category_bloc.dart';
+import '../../add_expense/blocs/create_expense_bloc/create_expense_bloc.dart';
+import '../../add_expense/blocs/get_categories/get_categories_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -61,7 +66,22 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => const AddExpense()
+              builder: (BuildContext context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => CreateCategoryBloc(FirebaseExpenseRepository())
+                  ), 
+                  BlocProvider(
+                    create: (context) => GetCategoriesBloc(FirebaseExpenseRepository())
+                    ..add(GetCategories()))
+                  , 
+                  BlocProvider(
+                    create: (context) => CreateExpenseBloc(FirebaseExpenseRepository())
+                    )
+                  , 
+                ],
+                child: const AddExpense()
+              )
             )
           );
         },
