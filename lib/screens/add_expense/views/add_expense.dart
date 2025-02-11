@@ -2,6 +2,7 @@ import 'package:expense_repository/expense_repository.dart';
 import 'package:expensetrackerflutter/screens/add_expense/blocs/create_expense_bloc/create_expense_bloc.dart';
 import 'package:expensetrackerflutter/screens/add_expense/blocs/get_categories/get_categories_bloc.dart';
 import 'package:expensetrackerflutter/screens/add_expense/views/add_category_expense.dart';
+import 'package:expensetrackerflutter/screens/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,17 +17,6 @@ class AddExpense extends StatefulWidget {
 }
 
 class _AddExpenseState extends State<AddExpense> {
-  Map<String, IconData> cupertinoIconsMap = {
-    "cart": CupertinoIcons.cart,
-    "car": CupertinoIcons.car,
-    "tv": CupertinoIcons.tv,
-    "heart": CupertinoIcons.heart,
-    "book": CupertinoIcons.book,
-    "bag": CupertinoIcons.bag,
-    "money_dollar": CupertinoIcons.money_dollar,
-    "paw": CupertinoIcons.paw,
-    "circle": CupertinoIcons.circle,
-  };
 
   TextEditingController amountController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
@@ -34,21 +24,6 @@ class _AddExpenseState extends State<AddExpense> {
 
   bool isLoading = false;
   late Expense expense;
-
-  // Function to get the icon from the name stored in the database
-  IconData getCupertinoIcon(String iconName) {
-    return cupertinoIconsMap[iconName] ?? CupertinoIcons.question;
-  }
-
-  Color getColorFromHex(String hexColor) {
-    hexColor = hexColor.replaceAll('#', '');
-
-    if (hexColor.length == 6) {
-      hexColor = 'FF$hexColor';
-    }
-
-    return Color(int.parse(hexColor, radix: 16));
-  }
 
   @override
   void initState() {
@@ -63,7 +38,7 @@ class _AddExpenseState extends State<AddExpense> {
     return BlocListener<CreateExpenseBloc, CreateExpenseState>(
       listener: (context, state) {
         if(state is CreateExpenseSuccess) {
-          Navigator.pop(context);
+          Navigator.pop(context, expense);
         } else if (state is CreateExpenseLoading) {
           setState(() {
             isLoading = !isLoading;
