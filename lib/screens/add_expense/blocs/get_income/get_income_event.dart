@@ -6,3 +6,5 @@ sealed class GetIncomeEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class GetIncome extends GetIncomeEvent {}

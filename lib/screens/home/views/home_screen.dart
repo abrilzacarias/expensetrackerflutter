@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:math';
 
 import 'package:expensetrackerflutter/screens/home/blocs/get_expenses/get_expenses_bloc.dart';
@@ -11,6 +13,7 @@ import '../../add_expense/blocs/create_category/create_category_bloc.dart';
 import '../../add_expense/blocs/create_expense_bloc/create_expense_bloc.dart';
 import '../../add_expense/blocs/create_income_bloc/create_income_bloc.dart';
 import '../../add_expense/blocs/get_categories/get_categories_bloc.dart';
+import '../../add_expense/blocs/get_income/get_income_bloc.dart';
 import '../../add_expense/views/add_transaction.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -64,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 FloatingActionButtonLocation.centerDocked,
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                var newExpense = await Navigator.push(
+                var newTransaction = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) =>
@@ -84,12 +87,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   FirebaseExpenseRepository())),
                                 
                         ], child: const AddTransaction())));
-
-                if(newExpense != null) {
-                  setState(() {
-                    state.expenses.insert(0, newExpense);
-                  });
-                }
+                  
+                if (newTransaction != null) {
+                    if (newTransaction is Expense) {
+                      context.read<GetExpensesBloc>().add(GetExpenses()); // 🔄 Actualizar lista de gastos
+                    } else if (newTransaction is Income) {
+                      context.read<GetIncomeBloc>().add(GetIncome()); // 🔄 Actualizar lista de ingresos
+                    }
+                  }
               },
               shape: CircleBorder(),
               child: Container(
@@ -105,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: const Icon(CupertinoIcons.add)),
             ),
             body: index == 0 
-            ? MainScreen(state.expenses) 
+            ? MainScreen() 
             : StatsScreen(),
           );
         } else {
