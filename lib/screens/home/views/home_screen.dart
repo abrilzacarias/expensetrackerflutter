@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:expensetrackerflutter/screens/add_expense/views/add_expense.dart';
 import 'package:expensetrackerflutter/screens/home/blocs/get_expenses/get_expenses_bloc.dart';
 import 'package:expensetrackerflutter/screens/home/views/main_screen.dart';
 import 'package:expensetrackerflutter/screens/stats/stats_screen.dart';
@@ -10,7 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expense_repository/expense_repository.dart';
 import '../../add_expense/blocs/create_category/create_category_bloc.dart';
 import '../../add_expense/blocs/create_expense_bloc/create_expense_bloc.dart';
+import '../../add_expense/blocs/create_income_bloc/create_income_bloc.dart';
 import '../../add_expense/blocs/get_categories/get_categories_bloc.dart';
+import '../../add_expense/views/add_transaction.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -78,7 +79,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           BlocProvider(
                               create: (context) => CreateExpenseBloc(
                                   FirebaseExpenseRepository())),
-                        ], child: const AddExpense())));
+                          BlocProvider(
+                              create: (context) => CreateIncomeBloc(
+                                  FirebaseExpenseRepository())),
+                                
+                        ], child: const AddTransaction())));
 
                 if(newExpense != null) {
                   setState(() {
