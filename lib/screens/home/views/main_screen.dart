@@ -225,6 +225,7 @@ class MainScreen extends StatelessWidget {
               child: ListView.builder(
                 itemCount: expenses.length,
                 itemBuilder: (context, i) {
+                  //print('Item index: $i');
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
                     child: Container(

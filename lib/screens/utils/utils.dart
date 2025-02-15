@@ -17,7 +17,7 @@ IconData getCupertinoIcon(String iconName) {
   return cupertinoIconsMap[iconName] ?? CupertinoIcons.question;
 }
 
-
+/// Converts a hexadecimal code into a valid `Color` in Flutter
 Color getColorFromHex(String hexColor) {
     hexColor = hexColor.replaceAll('#', '');
 
