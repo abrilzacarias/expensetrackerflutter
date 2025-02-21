@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:expense_repository/expense_repository.dart';
+import 'package:expensetrackerflutter/services/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,16 +58,27 @@ class MainScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black, // Assuming a default color
+                            color: Colors.black,
                           ),
                         ),
                       ],
                     ),
                   ],
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(CupertinoIcons.settings),
+                PopupMenuButton<String>(
+                  onSelected: (value) {
+                    if (value == 'logout') {
+                      AuthService().signOut();
+                      Navigator.pushReplacementNamed(context, '/login');
+                    }
+                  },
+                  itemBuilder: (BuildContext context) => [
+                    const PopupMenuItem<String>(
+                      value: 'logout',
+                      child: Text('Cerrar sesión'),
+                    ),
+                  ],
+                  icon: const Icon(Icons.settings),
                 ),
               ],
             ),
